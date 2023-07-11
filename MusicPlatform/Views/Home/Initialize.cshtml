@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div id="info" class="text-center" >
+    <h1 class="display-4">Welcome to music platform</h1>
+    <h3 id="progress"></h3>
+    <p id="message">Please wait while database is setting up, it will take few moments.</p>
+    <p id="info-status"></p>
+</div>
+
+
+
+@{
+}
+<script>
+    let info = document.getElementById("info");
+    var progress = document.getElementById("progress");
+    var message = document.getElementById("message");
+    let infoStatus = document.getElementById("info-status");
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeDatabase();
+    });
+    document.addEventListener('DatabaseInitialized', function () {
+        window.location = '@Url.Action("Index", "Home")';
+    });
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/progressHub") // Specify the URL of your ProgressHub
+        .build();
+
+    connection.start().then(() => {
+        // Connection established
+    }).catch(err => {
+        // Connection error
+    });
+
+    connection.on("ProgressUpdate", percentage => {
+        progress.hidden = false;
+        message.hidden = false;
+        progress.innerText = percentage + ' %';
+    });
+
+    connection.on("RecordsUpdate", recordsDone => {
+        infoStatus.innerText = "Records updated: " + recordsDone.current + " out of total: " + recordsDone.total;
+    });
+    connection.on("Done", () => {
+        message.innerText = "Few more moments and you will be redirected to home page. Writing records to database. Dont exit!";
+
+    });
+</script>

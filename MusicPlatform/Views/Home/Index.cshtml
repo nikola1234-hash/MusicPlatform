@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model MusicPlatform.ViewModels.HomeViewModel;
+<div id="content">
+    <div class="text-center">
+        <h1 class="display-3">@Model.ArtistsTitle</h1>
+    </div>
+    @{
+        int artistsPerRow = 3;
+        int totalArtists = Model.Artists.Count;
+        int rowIndex = 0;
+
+
+        int totalSongs = Model.Songs.Count;
+        int songsPerRow = 3;
+        int songRowIndex = 0;
+    }
+
+    @for (int i = 0; i < totalArtists; i += artistsPerRow)
+    {
+        <div class="row">
+            @for (int j = i; j < i + artistsPerRow && j < totalArtists; j++)
+            {
+                var artist = Model.Artists[j];
+
+                <div class="col-4 mb-3">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="@artist.ImageUrl[0]" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@artist.Name</h5>
+                            <p class="card-text">Total listeners: @artist.Listeners</p>
+                            <a href="@Url.Action("Index", "ArtistController", new { id = artist.Id })" class="btn btn-primary">Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+
+    <div class="text-center">
+        <h1 class="display-3">@Model.SongsTitle</h1>
+    </div>
+
+    @for (int i = 0; i < totalSongs; i += songsPerRow)
+    {
+        <div class="row">
+            @for (int j = i; j < i + songsPerRow && j < totalSongs; j++)
+            {
+                var song = Model.Songs[j];
+
+                <div class="col-4 mb-3">
+                    <div class="card" style="width: 18rem;">
+                     
+                        <div class="card-body">
+                            <h5 class="card-title">@song.Name</h5>
+                            <p class="card-text">Artist: @song.Artist.Name</p>
+                            <a href="@Url.Action("Index", "SongController", new { id = song.Id })" class="btn btn-primary">Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+
+</div>
