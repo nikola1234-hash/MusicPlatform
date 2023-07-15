@@ -23,12 +23,19 @@ namespace MusicPlatform.Data
         public DbSet<AppSettings> AppSettings { get; set; }
 
 
-        public async Task<List<Song>> SearchSongsByLyrics(string searchTerm)
+        public async Task<List<Song>> SearchSongs(string searchTerm)
         {
             return await Songs
                 .FromSqlRaw("EXECUTE SearchSongs @p0", searchTerm)
                 .ToListAsync();
         }
+        public async Task<List<Song>> SearcSongsByLyrics(string value)
+        {
+            return await Songs
+                .FromSqlRaw("EXECUTE SearchSongsByLyrics @p0", value)
+                .ToListAsync();
+        }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

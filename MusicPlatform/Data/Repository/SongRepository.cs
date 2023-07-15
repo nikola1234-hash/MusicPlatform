@@ -108,7 +108,7 @@ namespace MusicPlatform.Data.Repository
                 throw new ArgumentException(nameof(lyrics));
             }
 
-            var songs = await _context.SearchSongsByLyrics(lyrics);
+            var songs = await _context.SearchSongs(lyrics);
             return _mapper.Map<List<SongDto>>(songs);
 
 

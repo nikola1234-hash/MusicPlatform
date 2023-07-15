@@ -107,7 +107,7 @@ namespace MusicPlatform.Controllers
                 return View(searchViewModel);
             }
 
-            var result = await _dbContext.SearchSongsByLyrics(searchTerm);
+            var result = await _dbContext.SearchSongs(searchTerm);
             foreach(var data in result)
             {
                 data.Artist = await _dbContext.Artists.FirstOrDefaultAsync(a => a.Id == data.ArtistId);
@@ -126,7 +126,7 @@ namespace MusicPlatform.Controllers
 
         public IActionResult Find(string search)
         {
-            var result = _dbContext.SearchSongsByLyrics(search);
+            var result = _dbContext.SearchSongs(search);
             List<SongModel> songs = new List<SongModel>();
             return View(result);
         }
