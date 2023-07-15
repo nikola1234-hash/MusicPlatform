@@ -1,5 +1,6 @@
 ﻿using MusicPlatform.Data;
 using MusicPlatform.Enums;
+using MusicPlatform.Services.Authentication.Models;
 
 namespace MusicPlatform.Services.Authentication
 {

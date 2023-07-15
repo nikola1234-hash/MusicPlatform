@@ -1,6 +1,6 @@
 ﻿using MusicPlatform.DTO;
 
-namespace MusicPlatform.Data.Repository
+namespace MusicPlatform.Data.Repository.Infrastructure
 {
     public interface ISongRepository
     {

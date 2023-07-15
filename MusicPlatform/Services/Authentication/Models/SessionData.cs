@@ -1,4 +1,4 @@
-﻿namespace MusicPlatform.Services.Authentication
+﻿namespace MusicPlatform.Services.Authentication.Models
 {
     public class SessionData
     {

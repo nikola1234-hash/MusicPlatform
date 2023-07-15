@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.SignalR;
 using MusicPlatform.Models.ArtistModels;
 using MusicPlatform.Services.EnrichArtist;
 using MusicPlatform.Data.Repository;
+using MusicPlatform.Data.Repository.Infrastructure;
 
 namespace MusicPlatform
 {

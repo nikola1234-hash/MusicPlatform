@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MusicPlatform.Data.Entities;
+using MusicPlatform.Data.Repository.Infrastructure;
 using MusicPlatform.DTO;
 using MusicPlatform.Services.Api;
 using MusicPlatform.Services.EnrichArtist;

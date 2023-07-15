@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+﻿
 using Microsoft.AspNet.Identity;
 namespace MusicPlatform.Services
 {
