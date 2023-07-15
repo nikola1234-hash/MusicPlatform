@@ -3,16 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using MusicPlatform.Data;
-using MusicPlatform.DTO;
 using MusicPlatform.Models;
 using MusicPlatform.Models.HomeModels;
 using MusicPlatform.Services;
 using MusicPlatform.Services.Api;
-using MusicPlatform.Services.EnrichArtist;
 using MusicPlatform.Services.Progress;
-using MusicPlatform.ViewModels;
 using System.Diagnostics;
-using System.Drawing.Text;
 
 namespace MusicPlatform.Controllers
 {
@@ -29,6 +25,19 @@ namespace MusicPlatform.Controllers
         private string Title { get; set; }
         private string SubTitle { get; set; }
         private int numberOfRecords = 6;
+
+        private bool isInitialized
+        {
+            get
+            {
+                var settings = _dbContext.AppSettings.FirstOrDefault();
+                if (settings is null)
+                {
+                    return false;
+                }
+                return settings.IsEnriched;
+            }
+        }
 
         public HomeController(ILogger<HomeController> logger, IApiService apiService, AppDbContext dbContext, IInitialDbService initialDbService, IHubContext<ProgressHub> hubContext, IMapper mapper)
         {
@@ -125,6 +134,11 @@ namespace MusicPlatform.Controllers
 
         public IActionResult Initialize()
         {
+            // Just in case
+            if(isInitialized)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return View();
         }
         public IActionResult Privacy()

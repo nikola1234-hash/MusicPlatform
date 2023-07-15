@@ -1,7 +1,7 @@
 ﻿using MusicPlatform.Models;
 using MusicPlatform.Models.HomeModels;
 
-namespace MusicPlatform.ViewModels
+namespace MusicPlatform.Models.HomeModels
 {
     public class HomeViewModel
     {
