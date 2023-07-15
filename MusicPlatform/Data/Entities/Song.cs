@@ -24,5 +24,15 @@ namespace MusicPlatform.Data.Entities
             Favorites = new List<Favorite>();
             Comments = new List<Comment>();
         }
+
+        public Song(string name, string lyrics, Guid artistId)
+        {
+            Name = name;
+            Lyrics = lyrics;
+            ArtistId = artistId;
+            Id = Guid.NewGuid();
+            Favorites = new List<Favorite>();
+            Comments = new List<Comment>();
+        }
     }
 }

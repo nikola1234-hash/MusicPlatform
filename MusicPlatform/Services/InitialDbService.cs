@@ -78,7 +78,6 @@ namespace MusicPlatform.Services
                         };
                         await _hubContext.Clients.All.SendAsync("RecordsUpdate", recordsDone);
 
-                        // await Task.Delay(100); // Adjust the delay duration if needed
                     }
                     await _hubContext.Clients.All.SendAsync("Done", null);
                     // Save the changes to the database

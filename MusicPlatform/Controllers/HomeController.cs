@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using MusicPlatform.Data;
 using MusicPlatform.DTO;
 using MusicPlatform.Models;
+using MusicPlatform.Models.HomeModels;
 using MusicPlatform.Services;
 using MusicPlatform.Services.Api;
 using MusicPlatform.Services.EnrichArtist;
@@ -21,19 +23,21 @@ namespace MusicPlatform.Controllers
         private readonly AppDbContext _dbContext;
         private readonly IInitialDbService _initialDbService;
         private readonly IHubContext<ProgressHub> _hubContext;
+        private readonly IMapper _mapper;
 
 
         private string Title { get; set; }
         private string SubTitle { get; set; }
         private int numberOfRecords = 6;
 
-        public HomeController(ILogger<HomeController> logger, IApiService apiService, AppDbContext dbContext, IInitialDbService initialDbService, IHubContext<ProgressHub> hubContext)
+        public HomeController(ILogger<HomeController> logger, IApiService apiService, AppDbContext dbContext, IInitialDbService initialDbService, IHubContext<ProgressHub> hubContext, IMapper mapper)
         {
             _logger = logger;
             _apiService = apiService;
             _dbContext = dbContext;
             _initialDbService = initialDbService;
             _hubContext = hubContext;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -49,25 +53,8 @@ namespace MusicPlatform.Controllers
                 Title = "Featured Artists";
                 SubTitle = "Featured Songs";
 
-                EnrichService enrichService = new EnrichService();
+           
                 var artists = _dbContext.Artists.Include(s => s.Images).Take(numberOfRecords);
-
-                foreach (var artist in artists)
-                {
-                    if (string.IsNullOrEmpty(artist.Url))
-                    {
-                        ArtistResponseDto artistResponse = await _apiService.GetArtistDetails(artist.Name);
-                        if (artistResponse == null)
-                        {
-                            continue;
-                        }
-                        enrichService.Enrich(artist, artistResponse, _dbContext);
-                        _dbContext.Entry(artist).State = EntityState.Modified;
-                    }
-
-                }
-
-                await _dbContext.SaveChangesAsync();
 
                 List<ArtistModel> artistsDto = new List<ArtistModel>();
                 foreach (var artist in artists)
@@ -100,6 +87,36 @@ namespace MusicPlatform.Controllers
 
 
         }
+
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            SearchViewModel searchViewModel = new SearchViewModel();
+
+            if(string.IsNullOrEmpty(searchTerm) || string.IsNullOrWhiteSpace(searchTerm))
+            {
+                searchViewModel.Title = "Invalid Search term";
+                return View(searchViewModel);
+            }
+
+            var result = await _dbContext.SearchSongsByLyrics(searchTerm);
+            foreach(var data in result)
+            {
+                data.Artist = await _dbContext.Artists.FirstOrDefaultAsync(a => a.Id == data.ArtistId);
+            }
+            if(result.Count == 0)
+            {
+                searchViewModel.Title = "No results found";
+                return View(searchViewModel);
+            }
+            searchViewModel.Title = "Search Results";
+            List<SongModel> songs = _mapper.Map<List<SongModel>>(result);
+            searchViewModel.Songs = songs;
+
+            return View(searchViewModel);
+        }
+
+
+
         public IActionResult Initialize()
         {
             return View();

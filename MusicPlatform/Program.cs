@@ -17,6 +17,9 @@ using MusicPlatform.Models;
 using MusicPlatform.Services.Api;
 using MusicPlatform.Services.Progress;
 using Microsoft.AspNetCore.SignalR;
+using MusicPlatform.Models.ArtistModels;
+using MusicPlatform.Services.EnrichArtist;
+using MusicPlatform.Data.Repository;
 
 namespace MusicPlatform
 {
@@ -47,11 +50,17 @@ namespace MusicPlatform
                                                                            .GetSection("Records")
                                                                            .Bind(settings));
 
+            builder.Services.AddScoped<IEnrichService, EnrichService>();
+            builder.Services.AddScoped<ISongRepository, SongRepository>();
+            builder.Services.AddRazorPages();
+
             var config = new MapperConfiguration(
                                             cfg =>
                                             {
                                                 cfg.CreateMap<Artist, ArtistDto>();
-
+                                                cfg.CreateMap<Artist, ArtistModel>();
+                                                cfg.CreateMap<Song, SongModel>();
+                                                cfg.CreateMap<Song, SongDto>();
 
                                             }
                                            );
@@ -100,6 +109,8 @@ namespace MusicPlatform
                   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );
                 endpoints.MapHub<ProgressHub>("/progressHub");
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
             app.MapBlazorHub();
             app.Run();

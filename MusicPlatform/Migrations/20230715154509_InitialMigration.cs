@@ -5,10 +5,50 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MusicPlatform.Migrations
 {
-    public partial class initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+
+            migrationBuilder.Sql(@"
+            CREATE PROCEDURE SearchSongs
+                @SearchTerm NVARCHAR(MAX)
+            AS
+            BEGIN
+                SELECT s.*
+                FROM Songs s
+                INNER JOIN Artists a ON s.ArtistId = a.Id
+                WHERE  s.Name LIKE '%' + @SearchTerm + '%'
+                    OR a.Name LIKE '%' + @SearchTerm + '%'
+            END
+        ");
+
+            migrationBuilder.Sql(@"
+            CREATE PROCEDURE SearchSongsByLyrics
+                @SearchTerm NVARCHAR(MAX)
+            AS
+            BEGIN
+                SELECT s.*
+                FROM Songs s
+                INNER JOIN Artists a ON s.ArtistId = a.Id
+                WHERE s.Lyrics LIKE '%' + @SearchTerm + '%'
+                   
+            END
+        ");
+            migrationBuilder.CreateTable(
+                name: "AppSettings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsEnriched = table.Column<bool>(type: "bit", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppSettings", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Artists",
                 columns: table => new
@@ -173,10 +213,10 @@ namespace MusicPlatform.Migrations
                 columns: new[] { "Id", "DateCreated", "DateModified", "Email", "Password", "Role", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("353da277-876c-461a-8125-a10cd9bacc7c"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@gmail.com", "APo//L+3Mc69XIdXxWiKye4bvLfToJEAF9B45I9eRgVfl/N9Ck4XiPmu7621wSnDIw==", 0, "admin" },
-                    { new Guid("9987bc29-6ebe-4759-9c69-18230ae489e9"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "u2@gmail.com", "APo//L+3Mc69XIdXxWiKye4bvLfToJEAF9B45I9eRgVfl/N9Ck4XiPmu7621wSnDIw==", 1, "user2" },
-                    { new Guid("b99c198e-6baf-4719-ab57-3ded63e0cbec"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "u1@gmail.com", "APo//L+3Mc69XIdXxWiKye4bvLfToJEAF9B45I9eRgVfl/N9Ck4XiPmu7621wSnDIw==", 1, "user1" },
-                    { new Guid("e8a3e08e-5acc-4837-a396-9186e7c26cbc"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "u3@gmail.com", "APo//L+3Mc69XIdXxWiKye4bvLfToJEAF9B45I9eRgVfl/N9Ck4XiPmu7621wSnDIw==", 1, "user3" }
+                    { new Guid("539b4692-f68f-46d4-b78b-462dfcade644"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "u1@gmail.com", "AGoHwdO7ecu3Vw9YpwyVqwG0C9UFLFOvcqSnHQSP4rZD/I4uZ6LLqLm/zMsOzgE5yw==", 1, "user1" },
+                    { new Guid("7ae9701f-6c12-4f3b-a033-1228a9423f49"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "u2@gmail.com", "AGoHwdO7ecu3Vw9YpwyVqwG0C9UFLFOvcqSnHQSP4rZD/I4uZ6LLqLm/zMsOzgE5yw==", 1, "user2" },
+                    { new Guid("c07d04d9-9132-42ec-b4e7-53651cf8a715"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "u3@gmail.com", "AGoHwdO7ecu3Vw9YpwyVqwG0C9UFLFOvcqSnHQSP4rZD/I4uZ6LLqLm/zMsOzgE5yw==", 1, "user3" },
+                    { new Guid("f6da7352-8643-44af-955d-8a687cbf8f93"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@gmail.com", "AGoHwdO7ecu3Vw9YpwyVqwG0C9UFLFOvcqSnHQSP4rZD/I4uZ6LLqLm/zMsOzgE5yw==", 0, "admin" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -240,6 +280,11 @@ namespace MusicPlatform.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql("DROP PROCEDURE SearchSongs");
+            migrationBuilder.Sql("DROP PROCEDURE SearchSongsByLyrics");
+            migrationBuilder.DropTable(
+                name: "AppSettings");
+
             migrationBuilder.DropTable(
                 name: "ArtistImages");
 

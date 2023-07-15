@@ -22,6 +22,26 @@ namespace MusicPlatform.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("MusicPlatform.Data.Entities.AppSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsEnriched")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppSettings");
+                });
+
             modelBuilder.Entity("MusicPlatform.Data.Entities.Artist", b =>
                 {
                     b.Property<Guid>("Id")
@@ -241,41 +261,41 @@ namespace MusicPlatform.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("353da277-876c-461a-8125-a10cd9bacc7c"),
+                            Id = new Guid("f6da7352-8643-44af-955d-8a687cbf8f93"),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@gmail.com",
-                            Password = "APo//L+3Mc69XIdXxWiKye4bvLfToJEAF9B45I9eRgVfl/N9Ck4XiPmu7621wSnDIw==",
+                            Password = "AGoHwdO7ecu3Vw9YpwyVqwG0C9UFLFOvcqSnHQSP4rZD/I4uZ6LLqLm/zMsOzgE5yw==",
                             Role = 0,
                             Username = "admin"
                         },
                         new
                         {
-                            Id = new Guid("b99c198e-6baf-4719-ab57-3ded63e0cbec"),
+                            Id = new Guid("539b4692-f68f-46d4-b78b-462dfcade644"),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "u1@gmail.com",
-                            Password = "APo//L+3Mc69XIdXxWiKye4bvLfToJEAF9B45I9eRgVfl/N9Ck4XiPmu7621wSnDIw==",
+                            Password = "AGoHwdO7ecu3Vw9YpwyVqwG0C9UFLFOvcqSnHQSP4rZD/I4uZ6LLqLm/zMsOzgE5yw==",
                             Role = 1,
                             Username = "user1"
                         },
                         new
                         {
-                            Id = new Guid("9987bc29-6ebe-4759-9c69-18230ae489e9"),
+                            Id = new Guid("7ae9701f-6c12-4f3b-a033-1228a9423f49"),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "u2@gmail.com",
-                            Password = "APo//L+3Mc69XIdXxWiKye4bvLfToJEAF9B45I9eRgVfl/N9Ck4XiPmu7621wSnDIw==",
+                            Password = "AGoHwdO7ecu3Vw9YpwyVqwG0C9UFLFOvcqSnHQSP4rZD/I4uZ6LLqLm/zMsOzgE5yw==",
                             Role = 1,
                             Username = "user2"
                         },
                         new
                         {
-                            Id = new Guid("e8a3e08e-5acc-4837-a396-9186e7c26cbc"),
+                            Id = new Guid("c07d04d9-9132-42ec-b4e7-53651cf8a715"),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "u3@gmail.com",
-                            Password = "APo//L+3Mc69XIdXxWiKye4bvLfToJEAF9B45I9eRgVfl/N9Ck4XiPmu7621wSnDIw==",
+                            Password = "AGoHwdO7ecu3Vw9YpwyVqwG0C9UFLFOvcqSnHQSP4rZD/I4uZ6LLqLm/zMsOzgE5yw==",
                             Role = 1,
                             Username = "user3"
                         });

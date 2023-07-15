@@ -3,7 +3,7 @@ using MusicPlatform.Data.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace MusicPlatform.Models
+namespace MusicPlatform.Models.HomeModels
 {
     public class SongModel
     {
@@ -11,7 +11,6 @@ namespace MusicPlatform.Models
         public string Name { get; set; }
         public string Lyrics { get; set; }
         public Artist Artist { get; set; }
-
         public SongModel(Song song)
         {
             Id = song.Id;

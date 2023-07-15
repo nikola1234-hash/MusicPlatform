@@ -20,6 +20,15 @@ namespace MusicPlatform.Data
         public DbSet<FanBase> FanBases { get; set; }
         public DbSet<Artist> Artists { get; set; }
         public DbSet<ArtistImages> ArtistImages { get; set; }
+        public DbSet<AppSettings> AppSettings { get; set; }
+
+
+        public async Task<List<Song>> SearchSongsByLyrics(string searchTerm)
+        {
+            return await Songs
+                .FromSqlRaw("EXECUTE SearchSongs @p0", searchTerm)
+                .ToListAsync();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

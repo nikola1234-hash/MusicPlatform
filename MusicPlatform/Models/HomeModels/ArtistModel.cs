@@ -1,6 +1,6 @@
 ﻿using MusicPlatform.Data.Entities;
 
-namespace MusicPlatform.Models
+namespace MusicPlatform.Models.HomeModels
 {
     public class ArtistModel
     {

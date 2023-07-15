@@ -30,7 +30,7 @@
                         <div class="card-body">
                             <h5 class="card-title">@artist.Name</h5>
                             <p class="card-text">Total listeners: @artist.Listeners</p>
-                            <a href="@Url.Action("Index", "ArtistController", new { id = artist.Id })" class="btn btn-primary">Details</a>
+                            <a asp-controller="Artist" asp-action="Index" asp-route-id="@artist.Id" class="btn btn-primary">Details</a>
                         </div>
                     </div>
                 </div>

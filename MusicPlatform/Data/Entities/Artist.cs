@@ -20,5 +20,13 @@ namespace MusicPlatform.Data.Entities
             FanBases = new List<FanBase>();
             Images = new List<ArtistImages>();
         }
+        public Artist(string name)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            Songs = new List<Song>();
+            FanBases = new List<FanBase>();
+            Images = new List<ArtistImages>();
+        }
     }
 }

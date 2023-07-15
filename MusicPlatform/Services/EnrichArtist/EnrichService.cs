@@ -5,7 +5,7 @@ using MusicPlatform.DTO;
 
 namespace MusicPlatform.Services.EnrichArtist
 {
-    public class EnrichService
+    public class EnrichService : IEnrichService
     {
         public void Enrich(Artist artist, ArtistResponseDto artistResponse, AppDbContext dbContext)
         {

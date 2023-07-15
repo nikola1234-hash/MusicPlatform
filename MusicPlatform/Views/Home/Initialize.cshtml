@@ -2,12 +2,17 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
+
 <div id="info" class="text-center" >
     <h1 class="display-4">Welcome to music platform</h1>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+    </div>
     <h3 id="progress"></h3>
     <p id="message">Please wait while database is setting up, it will take few moments.</p>
     <p id="info-status"></p>
 </div>
+
 
 
 
@@ -18,11 +23,20 @@
     var progress = document.getElementById("progress");
     var message = document.getElementById("message");
     let infoStatus = document.getElementById("info-status");
+    let progressBar = document.getElementById("progress-bar");
+
+
+
+
     document.addEventListener('DOMContentLoaded', function () {
         initializeDatabase();
     });
-    document.addEventListener('DatabaseInitialized', function () {
+
+    document.addEventListener('DataEnriched', function () {
         window.location = '@Url.Action("Index", "Home")';
+    });
+    document.addEventListener('DatabaseInitialized', function () {
+        enrichData();
     });
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("/progressHub") // Specify the URL of your ProgressHub
@@ -37,9 +51,16 @@
     connection.on("ProgressUpdate", percentage => {
         progress.hidden = false;
         message.hidden = false;
-        progress.innerText = percentage + ' %';
+        updateProgressBar(percentage);
+        progress.innerText = "Progress: " + percentage + "%";
+       
     });
-
+    connection.on("EnrichUpdate", percentage => {
+        progress.hidden = false;
+        message.hidden = false;
+        updateProgressBar(percentage);
+        progress.innerText = "Enriching data: " + percentage + "%";
+    });
     connection.on("RecordsUpdate", recordsDone => {
         infoStatus.innerText = "Records updated: " + recordsDone.current + " out of total: " + recordsDone.total;
     });

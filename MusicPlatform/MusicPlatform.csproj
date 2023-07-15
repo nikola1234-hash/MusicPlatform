@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Artist\Error.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\spotify_millsongdata.csv" />
   </ItemGroup>
 
@@ -38,9 +42,12 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\" />
-    <Folder Include="Data\Repository\" />
+    <Folder Include="Data\StoredProcedures\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Views\Artist\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Artist\Error.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
