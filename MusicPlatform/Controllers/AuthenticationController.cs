@@ -1,9 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using MusicPlatform.Data.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using MusicPlatform.Models.AuthenticationModels;
 using MusicPlatform.Services.Authentication;
-using System.Security.Policy;
 
 namespace MusicPlatform.Controllers
 {
@@ -11,11 +8,13 @@ namespace MusicPlatform.Controllers
     {
         private readonly IAuthenticationService auth;
         private readonly ISessionService _session;
+        private readonly ILogger<AuthenticationController> _logger;
 
-        public AuthenticationController(IAuthenticationService auth, ISessionService session)
+        public AuthenticationController(IAuthenticationService auth, ISessionService session, ILogger<AuthenticationController> logger)
         {
             this.auth = auth;
             _session = session;
+            _logger = logger;
         }
 
         public IActionResult Login()
@@ -32,27 +31,36 @@ namespace MusicPlatform.Controllers
 
         public IActionResult LoginSubmit(LoginForm form)
         {
-            if(form is null)
+            try
             {
-                return RedirectToAction(nameof(Login));
+
+                if (form is null)
+                {
+                    return RedirectToAction(nameof(Login));
+                }
+
+                if (ModelState.IsValid)
+                {
+                    var result = auth.Login(form.Username, form.Password);
+                    if (result == AuthenticationResult.InvalidUsernameOrPassword)
+                    {
+                        ModelState.AddModelError("InvalidUsernameOrPassword", "Invalid username or password");
+                        return View("Login");
+                    }
+                    if (result == AuthenticationResult.UserNotFound)
+                    {
+                        ModelState.AddModelError("UserNotFound", "User not found");
+                        return View("Login");
+                    }
+
+                    return RedirectToAction("Index", "Home");
+
+                }
             }
-
-            if(ModelState.IsValid)
+            catch (Exception ex)
             {
-                var result = auth.Login(form.Username, form.Password);
-                if(result == AuthenticationResult.InvalidUsernameOrPassword)
-                {
-                    ModelState.AddModelError("InvalidUsernameOrPassword", "Invalid username or password");
-                    return View("Login");
-                }
-                if(result == AuthenticationResult.UserNotFound)
-                {
-                    ModelState.AddModelError("UserNotFound", "User not found");
-                    return View("Login");
-                }
-               
-                return RedirectToAction("Index", "Home");
-
+                _logger.LogError(ex.Message);  
+                return View("Error");
             }
 
             return View("Login");
@@ -65,27 +73,36 @@ namespace MusicPlatform.Controllers
         }
         public IActionResult RegisterSubmit(RegisterForm form)
         {
-            if(!ModelState.IsValid)
+            try
             {
-                return View("Register");
-            }
-            var usernameExists = auth.UsernameExist(form.Username);
+                if (!ModelState.IsValid)
+                {
+                    return View("Register");
+                }
+                var usernameExists = auth.UsernameExist(form.Username);
 
-            if(usernameExists)
+                if (usernameExists)
+                {
+                    ModelState.AddModelError("UsernameExists", "Username already exists");
+                    return View("Register");
+                }
+
+                var emailExists = auth.EmailExist(form.Email);
+                if (emailExists)
+                {
+                    ModelState.AddModelError("EmailExists", "Email already exists");
+                    return View("Register");
+                }
+
+
+                auth.Register(form.Username, form.Password, form.Email);
+            }
+            catch (Exception ex)
             {
-                ModelState.AddModelError("UsernameExists", "Username already exists");
-                return View("Register");
-            }
 
-            var emailExists = auth.EmailExist(form.Email);
-            if(emailExists)
-            {
-                ModelState.AddModelError("EmailExists", "Email already exists");
-                return View("Register");
+                _logger.LogError(ex.Message);
+                return View("Error");
             }
-
-   
-            auth.Register(form.Username, form.Password, form.Email);
 
             return RedirectToAction("Index", "Home");
         }
