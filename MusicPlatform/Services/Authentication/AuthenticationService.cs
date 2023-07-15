@@ -9,10 +9,12 @@ namespace MusicPlatform.Services.Authentication
     public class AuthenticationService : IAuthenticationService
     {
 
+        private readonly ISessionService _sessionService;
         private readonly AppDbContext _dbContext;
 
-        public AuthenticationService(AppDbContext dbContext)
+        public AuthenticationService(ISessionService sessionService, AppDbContext dbContext)
         {
+            _sessionService = sessionService;
             _dbContext = dbContext;
         }
 
@@ -38,9 +40,31 @@ namespace MusicPlatform.Services.Authentication
                 return AuthenticationResult.InvalidUsernameOrPassword;
             }
 
-
+            _sessionService.StoreToSession(user.Id.ToString());
 
             return AuthenticationResult.Success;
+        }
+
+        public void Logout()
+        {
+            _sessionService.RemoveFromSession();
+        }
+
+        public bool IsLoggedIn()
+        {
+            return _sessionService.GetFromSession() != null;
+        }
+
+        public bool UsernameExist(string username)
+        {
+            var user = _dbContext.Users.FirstOrDefault(x => x.Username == username);
+            return user != null;
+        }
+
+        public bool EmailExist(string email)
+        {
+            var user = _dbContext.Users.FirstOrDefault(x => x.Email == email);
+            return user != null;
         }
 
         public void Register(string username, string password, string email)

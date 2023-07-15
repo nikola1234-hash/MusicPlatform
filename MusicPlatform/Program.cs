@@ -53,6 +53,9 @@ namespace MusicPlatform
             builder.Services.AddScoped<IEnrichService, EnrichService>();
             builder.Services.AddScoped<ISongRepository, SongRepository>();
             builder.Services.AddRazorPages();
+            builder.Services.AddSession();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<ISessionService, SessionService>();
 
             var config = new MapperConfiguration(
                                             cfg =>
@@ -97,7 +100,7 @@ namespace MusicPlatform
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
