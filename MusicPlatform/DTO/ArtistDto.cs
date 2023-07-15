@@ -11,6 +11,11 @@ namespace MusicPlatform.DTO
         public string Listeners { get; set; }
         public string Plays { get; set; }
 
+        public ArtistDto()
+        {
+            
+        }
+
         public ArtistDto(Artist artist)
         {
             Id = artist.Id;

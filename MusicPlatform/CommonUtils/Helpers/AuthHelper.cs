@@ -21,6 +21,7 @@ namespace MusicPlatform.CommonUtils.Helpers
         {
             return sessionService.IsAdmin();
         }
+      
 
     }
 }

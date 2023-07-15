@@ -27,7 +27,7 @@ namespace MusicPlatform.Services.Authentication
             }
 
 
-            var user = _dbContext.Users.FirstOrDefault(x => x.Username == username);
+            var user = _dbContext.Users.FirstOrDefault(x => x.Email == username);
             if (user == null)
             {
                 return AuthenticationResult.UserNotFound;

@@ -115,6 +115,12 @@ namespace MusicPlatform.Controllers
             return View(searchViewModel);
         }
 
+        public IActionResult Find(string search)
+        {
+            var result = _dbContext.SearchSongsByLyrics(search);
+            List<SongModel> songs = new List<SongModel>();
+            return View(result);
+        }
 
 
         public IActionResult Initialize()

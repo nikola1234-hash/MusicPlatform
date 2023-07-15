@@ -25,7 +25,9 @@ namespace MusicPlatform.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View();
+
+            LoginForm form = new LoginForm();
+            return View(form);
         }
 
         public IActionResult LoginSubmit(LoginForm form)
