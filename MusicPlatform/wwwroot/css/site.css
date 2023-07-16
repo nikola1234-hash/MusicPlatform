@@ -439,3 +439,63 @@ p {
 b, strong {
     font-weight: 700 !important;
 }
+
+.button-div {
+    padding: 60px;
+    position: relative;
+}
+
+.fav-button {
+    border: none;
+    height: 40px;
+    width: 120px;
+    font-size: 15px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .fav-button i {
+        position: absolute;
+        left: 70px;
+    }
+
+    .fav-button:active i {
+        animation: item 1s ease-in forwards;
+    }
+
+
+@keyframes item {
+    0% {
+        top: 20%;
+        color: #000;
+    }
+
+    25% {
+        top: 60%;
+        color: #000;
+    }
+
+    50% {
+        top: 100%;
+    }
+
+    75% {
+        top: 60%;
+    }
+
+    0% {
+        top: 0%;
+    }
+}
+.main-div {
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}

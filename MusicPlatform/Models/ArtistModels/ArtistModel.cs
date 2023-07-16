@@ -4,8 +4,9 @@ namespace MusicPlatform.Models.ArtistModels
 {
     public class ArtistModel
     {
-        public ArtistModel(string name, string? url, string? listeners, string? plays)
+        public ArtistModel(Guid id, string name, string? url, string? listeners, string? plays)
         {
+            Id = id;
             Name = name;
             Url = url;
             Listeners = listeners;
@@ -14,6 +15,7 @@ namespace MusicPlatform.Models.ArtistModels
         }
         public ArtistModel()
         {
+            Id = Guid.NewGuid();
             Name = string.Empty;
             Url = string.Empty;
             Listeners = string.Empty;
@@ -21,6 +23,7 @@ namespace MusicPlatform.Models.ArtistModels
             Images = new();
 
         }
+        public Guid Id { get; set; }
         public List<ArtistImages> Images { get; set; }
         public string Name { get; set; }
         public string? Url { get; set; }

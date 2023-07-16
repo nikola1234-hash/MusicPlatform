@@ -21,7 +21,13 @@ namespace MusicPlatform.CommonUtils.Helpers
         {
             return sessionService.IsAdmin();
         }
-      
+        
+        public static string GetUserId(this IHtmlHelper helper)
+        {
+            var session = sessionService.GetFromSession();
+
+            return session.UserId;
+        }
 
     }
 }

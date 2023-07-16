@@ -8,13 +8,24 @@
             <div class="project-info-box mt-0">
 
                 <h5> @Model.Song.Name</h5>
-                <p class="mb-0"></p>
+              
+            
             </div><!-- / project-info-box -->
 
             <div class="project-info-box">
                 <p><b>Artist:</b> @Model.Artist.Name</p>
                 <p><b>Listens:</b> @Model.Artist.Listeners</p>
-
+                @if (Html.IsAuthenticated())
+                {
+                    <div class="main-div">
+                        <div class="button-div">
+                            <button id="favorite-button" data-user="@Html.GetUserId()" data-song="@Model.Song.Id" class="fav-button">
+                                <i class="fa fa-star"></i>
+                                <span>Favorites</span>
+                            </button>
+                        </div>
+                    </div>
+                }
 
             </div><!-- / project-info-box -->
 
@@ -41,3 +52,8 @@
         </div><!-- / column -->
     </div>
 </div>
+<script>
+    window.addEventListener('load', function(){
+        checkFavorites('@Model.Song.Id', '@Html.GetUserId()');
+    });
+</script>
