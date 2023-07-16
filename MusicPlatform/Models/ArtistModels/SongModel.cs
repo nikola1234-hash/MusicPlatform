@@ -2,8 +2,9 @@
 {
     public class SongModel
     {
-        public SongModel(string name, string lyrics)
+        public SongModel(Guid id, string name, string lyrics)
         {
+            Id = id;
             Name = name;
             Lyrics = lyrics;
         }
@@ -11,6 +12,7 @@
         {
             
         }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Lyrics { get; set; }
     }

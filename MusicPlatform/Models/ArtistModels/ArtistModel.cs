@@ -1,4 +1,6 @@
-﻿namespace MusicPlatform.Models.ArtistModels
+﻿using MusicPlatform.Data.Entities;
+
+namespace MusicPlatform.Models.ArtistModels
 {
     public class ArtistModel
     {
@@ -8,6 +10,7 @@
             Url = url;
             Listeners = listeners;
             Plays = plays;
+            Images = new();
         }
         public ArtistModel()
         {
@@ -15,8 +18,10 @@
             Url = string.Empty;
             Listeners = string.Empty;
             Plays = string.Empty;
+            Images = new();
 
         }
+        public List<ArtistImages> Images { get; set; }
         public string Name { get; set; }
         public string? Url { get; set; }
         public string? Listeners { get; set; }

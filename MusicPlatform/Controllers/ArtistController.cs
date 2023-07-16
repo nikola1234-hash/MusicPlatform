@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MusicPlatform.Data;
+using MusicPlatform.Data.Entities;
 using MusicPlatform.Models.ArtistModels;
 
 namespace MusicPlatform.Controllers
@@ -33,7 +35,7 @@ namespace MusicPlatform.Controllers
                     return View("Error");
                 }
 
-                var artist = _dbContext.Artists.FirstOrDefault(s=> s.Id == artistId);
+                Artist artist = _dbContext.Artists.Include(s=> s.Images).FirstOrDefault(s=> s.Id == artistId);
 
                 if (artist == null)
                 {

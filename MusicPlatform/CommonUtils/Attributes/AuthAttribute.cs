@@ -25,6 +25,7 @@ namespace MusicPlatform.CommonUtils.Attributes
             if (!isAuthenticated)
             {
                 context.Result = new UnauthorizedResult();
+                return;
             }
 
             if(Admin)
@@ -33,11 +34,12 @@ namespace MusicPlatform.CommonUtils.Attributes
                 if (!isAdmin)
                 {
                     context.Result = new UnauthorizedResult();
+                    return;
                 }
             }
 
             
-            return;
+          
 
         }
     }

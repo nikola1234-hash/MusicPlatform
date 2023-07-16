@@ -21,6 +21,7 @@ using MusicPlatform.Models.ArtistModels;
 using MusicPlatform.Services.EnrichArtist;
 using MusicPlatform.Data.Repository;
 using MusicPlatform.Data.Repository.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace MusicPlatform
 {
@@ -31,6 +32,8 @@ namespace MusicPlatform
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+           
             builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
                                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
@@ -116,6 +119,12 @@ namespace MusicPlatform
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
+
+
+            app.MapAreaControllerRoute(
+                                name: "MyAdmin",
+                                areaName: "Admin",
+                                pattern: "Admin/{controller=Admin}/{action=Index}/{id?}");
             app.MapBlazorHub();
             app.Run();
         }

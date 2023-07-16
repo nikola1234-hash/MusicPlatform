@@ -1,2 +1,36 @@
 ﻿@model MusicPlatform.Models.ArtistModels.ArtistViewModel;
-<h1>Hello World</h1>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="project-info-box mt-0">
+
+                <h5> @Model.Artist.Name</h5>
+                <p class="mb-0"></p>
+            </div><!-- / project-info-box -->
+
+            <div class="project-info-box">
+                <p><b>Artist:</b> @Model.Artist.Name</p>
+                <p><b>Listens:</b> @Model.Artist.Listeners</p>
+                <p><b>Plays:</b> @Model.Artist.Plays</p>
+                <p><b>Songs in database:</b> @Model.Songs.Count()</p>
+
+              
+            </div><!-- / project-info-box -->
+
+        </div><!-- / column -->
+
+        <div class="col-md-7">
+           
+            <img src="@Model.Artist.Images[0].Url" alt="project-image" class="rounded">
+            
+            <div class="project-info-box">
+                <p>Songs by this artist:</p>
+                @foreach(var song in Model.Songs)
+                {
+                    <p>Song: <a asp-action="Index" asp-controller="Song" asp-route-id="@song.Id"><b>@song.Name</b></a></p>
+                }
+              
+            </div><!-- / project-info-box -->
+        </div><!-- / column -->
+    </div>
+</div>

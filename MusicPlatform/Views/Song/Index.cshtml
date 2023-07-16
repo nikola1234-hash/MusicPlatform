@@ -1,5 +1,43 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model MusicPlatform.Models.SongModels.SongDetailsViewModel;
+@using MusicPlatform.CommonUtils.Helpers;
+
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="project-info-box mt-0">
+
+                <h5> @Model.Song.Name</h5>
+                <p class="mb-0"></p>
+            </div><!-- / project-info-box -->
+
+            <div class="project-info-box">
+                <p><b>Artist:</b> @Model.Artist.Name</p>
+                <p><b>Listens:</b> @Model.Artist.Listeners</p>
+
+
+            </div><!-- / project-info-box -->
+
+        </div><!-- / column -->
+
+        <div class="col-md-7">
+
+            <div class="project-info-box">
+                <p>Lyrics:</p>
+                <p>@Html.Raw(Model.Song.Lyrics)</p>
+                @if (Html.IsAuthenticated())
+                {
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Comment:</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <button type="submit" class="btn mt-2 btn-success">Submit</button>
+                        </div>
+                    </form>
+                }
+                
+
+            </div><!-- / project-info-box -->
+        </div><!-- / column -->
+    </div>
+</div>
