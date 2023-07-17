@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MusicPlatform.Data;
+using MusicPlatform.DTO;
 using MusicPlatform.Models.ArtistModels;
 using MusicPlatform.Models.SongModels;
 
@@ -62,6 +63,52 @@ namespace MusicPlatform.Controllers
 
 
             return View(model);
+        }
+
+
+        public IActionResult Search(string status)
+        {
+            if(!string.IsNullOrEmpty(status))
+            {
+                ViewBag.Status = status;
+            }
+            return View();
+        }
+      
+
+        public async Task<IActionResult> SearchSubmit(string lyrics)
+        {
+            if(string.IsNullOrEmpty(lyrics))
+            {
+                return RedirectToAction(nameof(Search));
+            }
+            var result = await _dbContext.SearcSongsByLyrics(lyrics);
+            if(result.Count() == 1)
+            {
+                return RedirectToAction(nameof(Index), "Song", new { id = result.FirstOrDefault().Id });
+            }
+            if(result.Count > 1)
+            {
+                List<SearchSongModel> list = new List<SearchSongModel>();
+                foreach(var song in result)
+                {
+                    list.Add(new SearchSongModel()
+                    {
+                        Id = song.Id,
+                        Title = song.Name,
+                        ArtistName = song.Artist.Name,
+                        ArtistId = song.ArtistId,
+                        Lyrics = song.Lyrics
+                        
+                    });
+                }
+
+                SearchViewModel model = new SearchViewModel(list);
+                return View("SearchResult", model);
+            }
+            return RedirectToAction(nameof(Search), "Song", new { status = "No results found"});
+
+          
         }
     }
 }

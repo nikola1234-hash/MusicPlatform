@@ -1,0 +1,41 @@
+﻿@model MusicPlatform.Models.SongModels.SearchViewModel;
+
+
+<div id="content">
+    <div class="text-center">
+        <h1 class="display-3">Song results:</h1>
+    </div>
+    @{
+
+        int totalSongs = Model.Songs.Count;
+        int songsPerRow = 3;
+        int songRowIndex = 0;
+    }
+
+    @for (int i = 0; i < totalSongs; i += songRowIndex)
+    {
+        <div class="row">
+            @for (int j = i; j < i + songRowIndex && j < totalSongs; j++)
+            {
+                var song = Model.Songs[j];
+
+                <div class="col-4 mb-3">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@song.Title</h5>
+                            <p class="card-text">Artist: @song.ArtistName</p>
+                            <textarea readonly class="form-control" id="commentText" rows="3"> @song.Lyrics</textarea>
+                            <hr />
+                            <a asp-controller="Artist" asp-action="Index" asp-route-id="@song.Id" class="btn btn-primary">Song Details</a>
+                            <a asp-controller="Song" asp-action="Index" asp-route-id="@song.ArtistId" class="btn btn-primary">Artist Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+
+
+
+</div>

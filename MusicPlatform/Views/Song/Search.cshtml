@@ -1,0 +1,22 @@
+﻿
+<div class="container justify-content-center">
+    <div class="row">
+        <div class="col">
+            <h3 class="text-center">Search song by lyrics</h3>
+            @if(ViewBag.Status != null && !string.IsNullOrEmpty(ViewBag.Status))
+            {
+                <p class="text-center">@ViewBag.Status</p>
+            }
+        </div>
+        
+    </div>
+    <div class="row">
+        <form asp-action="SearchSubmit">
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Lyrics:</label>
+                <textarea class="form-control" id="commentText" name="lyrics" rows="3"></textarea>
+                <button type="submit" class="btn mt-2 btn-success">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
