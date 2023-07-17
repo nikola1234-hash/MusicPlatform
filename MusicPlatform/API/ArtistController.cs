@@ -103,7 +103,75 @@ namespace MusicPlatform.API
                 await _hubContext.Clients.All.SendAsync("RecordsUpdate", recordsDone);
             }
         }
-  
+
+
+
+        [HttpPost("fans")]
+        public IActionResult AddFan(FanDto fanDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var isArtistParsed = Guid.TryParse(fanDto.ArtistId, out Guid artistId);
+                if (!isArtistParsed)
+                {
+                    return BadRequest();
+                }
+
+                var isUserParsed = Guid.TryParse(fanDto.UserId, out Guid userId);
+                if (!isUserParsed)
+                {
+                    return BadRequest();
+                }
+
+                if (fanDto is null)
+                {
+                    return BadRequest();
+                }
+
+                var artist = _dbContext.Artists.FirstOrDefault(a => a.Id == artistId);
+                if (artist is null)
+                {
+                    return BadRequest();
+                }
+
+                var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+                if (user is null)
+                {
+                    return BadRequest();
+                }
+
+                var fanAlreadyExists = _dbContext.FanBases.Any(f => f.Artist == artist && f.User == user);
+                if (fanAlreadyExists)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    var fan = new FanBase
+                    {
+                        Artist = artist,
+                        User = user
+                    };
+                    _dbContext.FanBases.Add(fan);
+                    artist.FanBases.Add(fan);
+                    _dbContext.SaveChanges();
+                    return Ok();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+        }
     }
 
     

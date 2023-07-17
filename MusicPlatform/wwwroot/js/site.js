@@ -56,16 +56,86 @@ function checkFavorites(id, userId) {
             if (response.ok) {
                 // Request successful
                 favoriteButton.style.backgroundColor = "green";
+                favoriteButton.innerHTML = "Remove from favorites";
             } else {
                 // Request failed
                 favoriteButton.style.backgroundColor = "black";
+                favoriteButton.innerHTML = "Add to favorites";
             }
         })
         .catch(error => {
             console.error('An error occurred while adding song to favorites:', error);
         });
 }
+function addComment(userId, songId) {
+    // API endpoint URL
+    const apiUrl = '/api/songs/comment';
+    const comment = document.getElementById('commentText').value;
+    // Request body
+    const requestBody = {
+        userId: userId,
+        songId: songId,
+        comment: comment
+    };
 
+    // Fetch options
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    };
+
+    // Make the API request
+    fetch(apiUrl, options)
+        .then(response => {
+            if (response.ok) {
+                // Request successful
+                alert('added comment');
+            } else {
+                // Request failed
+                console.error('Failed to add song to favorites.');
+            }
+        })
+        .catch(error => {
+            console.error('An error occurred while adding song to favorites:', error);
+        });
+}
+function addFan(userId, artistId) {
+    // API endpoint URL
+    const apiUrl = '/api/artist/fans';
+ 
+    // Request body
+    const requestBody = {
+        userId: userId,
+        artistId: artistId
+    };
+
+    // Fetch options
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    };
+
+    // Make the API request
+    fetch(apiUrl, options)
+        .then(response => {
+            if (response.ok) {
+                // Request successful
+                alert('added to fanbase');
+            } else {
+                // Request failed
+                console.error('Failed to add song to favorites.');
+            }
+        })
+        .catch(error => {
+            console.error('An error occurred while adding song to favorites:', error);
+        });
+}
 
 function addToFavorites(id, userId) {
     // API endpoint URL
@@ -92,7 +162,10 @@ function addToFavorites(id, userId) {
             if (response.ok) {
                 // Request successful
                 favoriteButton.style.backgroundColor = "green";
+                favoriteButton.innerHTML = "Remove from favorites";
             } else {
+
+
                 // Request failed
                 console.error('Failed to add song to favorites.');
             }

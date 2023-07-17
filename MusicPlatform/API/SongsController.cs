@@ -59,7 +59,7 @@ namespace MusicPlatform.API
             }
         }
 
-        [HttpPost]
+        [HttpPost]// or remove
         public IActionResult AddToFavorites(FavoritesModel model)
         {
             try
@@ -92,7 +92,9 @@ namespace MusicPlatform.API
                 var favoriteAlreadyExists = _dbContext.Favorites.Any(f => f.Song == song && f.User == user);
                 if (favoriteAlreadyExists)
                 {
-                    return BadRequest();
+                    _dbContext.Favorites.RemoveRange(_dbContext.Favorites.Where(f => f.Song == song && f.User == user));
+                    _dbContext.SaveChanges();
+                    return Ok();
                 }
 
                 var favorite = new Favorite
@@ -110,7 +112,62 @@ namespace MusicPlatform.API
                 return BadRequest();
             }
         }
+        [HttpPost("comment")]
+        public IActionResult AddComment(CommentModel model)
+        {
+            try
+            {
 
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var userParsed = Guid.TryParse(model.UserId, out Guid userIdParsed);
+                if (!userParsed)
+                {
+                    return BadRequest();
+                }
+                var songParsed = Guid.TryParse(model.SongId, out Guid songIdParsed);
+                if (!songParsed)
+                {
+                    return BadRequest();
+                }
+
+                var user = _dbContext.Users.FirstOrDefault(u => u.Id == userIdParsed);
+                if (user is null)
+                {
+                    return BadRequest();
+                }
+                var song = _dbContext.Songs.FirstOrDefault(s => s.Id == songIdParsed);
+                if (song is null)
+                {
+                    return BadRequest();
+                }
+                var commentExists = _dbContext.Comments.Any(c => c.Song == song && c.User == user);
+                if (commentExists)
+                {
+                    return BadRequest();
+                }
+                Comment comment = new Comment();
+                comment.UserId = user.Id;
+                comment.SongId = song.Id;
+                comment.Text = model.Comment;
+
+
+                song.Comments.Add(comment);
+                _dbContext.SaveChanges();
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
+
+
+        }
 
 
     }

@@ -1,4 +1,5 @@
 ﻿@model MusicPlatform.Models.ArtistModels.ArtistViewModel;
+@using MusicPlatform.CommonUtils.Helpers;
 <div class="container mt-3">
     <div class="row">
         <div class="col-md-5">
@@ -13,6 +14,11 @@
                 <p><b>Listens:</b> @Model.Artist.Listeners</p>
                 <p><b>Plays:</b> @Model.Artist.Plays</p>
                 <p><b>Songs in database:</b>@Model.Songs.Count()</p>
+                @if (Html.IsAuthenticated())
+                {
+                    <button class="btn btn-primary" onclick="addFan('@Html.GetUserId()', '@Model.Artist.Id')">Become fan</button>
+                }
+               
             </div><!-- / project-info-box -->
 
         </div><!-- / column -->

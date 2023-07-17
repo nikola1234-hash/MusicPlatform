@@ -41,8 +41,25 @@ namespace MusicPlatform.Controllers
 
             var songModel = _mapper.Map<SongModel>(song);
             var artistModel = _mapper.Map<ArtistModel>(artist);
+            var comments = _dbContext.Comments.Where(c => c.SongId == songId).ToList();
 
-            SongDetailsViewModel model = new SongDetailsViewModel(songModel, artistModel);
+            List<CommentModel> commentsList = new List<CommentModel>();
+            foreach (var comment in comments)
+            {
+                var user = _dbContext.Users.FirstOrDefault(u => u.Id == comment.UserId);
+
+                CommentModel commentModel = new CommentModel()
+                {
+
+                    User = user.Username,
+                    Comment = comment.Text
+                    
+                };
+                commentsList.Add(commentModel);
+               
+            }
+
+            SongDetailsViewModel model = new SongDetailsViewModel(songModel, artistModel, commentsList);
 
 
             return View(model);

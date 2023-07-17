@@ -111,20 +111,14 @@ namespace MusicPlatform
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                  name: "areas",
-                  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                );
+             
                 endpoints.MapHub<ProgressHub>("/progressHub");
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
 
 
-            app.MapAreaControllerRoute(
-                                name: "MyAdmin",
-                                areaName: "Admin",
-                                pattern: "Admin/{controller=Admin}/{action=Index}/{id?}");
+       
             app.MapBlazorHub();
             app.Run();
         }
