@@ -24,7 +24,7 @@ namespace MusicPlatform.CommonUtils.Attributes
             var isAuthenticated = sessionService.IsAuthenticated();
             if (!isAuthenticated)
             {
-                context.Result = new UnauthorizedResult();
+                context.Result = new RedirectResult("/Authentication/Login");
                 return;
             }
 
@@ -33,7 +33,7 @@ namespace MusicPlatform.CommonUtils.Attributes
                 var isAdmin = sessionService.IsAdmin();
                 if (!isAdmin)
                 {
-                    context.Result = new UnauthorizedResult();
+                    context.Result = new RedirectResult("/Authentication/Login");
                     return;
                 }
             }

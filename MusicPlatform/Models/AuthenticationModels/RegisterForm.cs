@@ -14,32 +14,20 @@ namespace MusicPlatform.Models.AuthenticationModels
         [Required]
         public string Password { get; set; }
         [Required]
-        public string ReapeatPassword { get; set; }
+        public string RepeatPassword { get; set; }
 
 
         private readonly IAuthenticationService _authService = ObjectResolverService.Resolve<IAuthenticationService>();
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if(Password != ReapeatPassword)
+            if(Password != RepeatPassword)
             {
-                yield return new ValidationResult("Passwords do not match", new[] { nameof(Password), nameof(ReapeatPassword) });
+                yield return new ValidationResult("Passwords do not match", new[] { nameof(Password), nameof(RepeatPassword) });
             }
-            Exception e = null;
+       
 
-            try
-            {
-                _authService.Register(Username, Email, Password);
-            }
-            catch (Exception ex)
-            {
-               e = ex;
-            }
-
-            if (e != null)
-            {
-                yield return new ValidationResult(e.Message, new[] { nameof(Username), nameof(Email), nameof(Password) });
-            }
+       
         }
     }
 }

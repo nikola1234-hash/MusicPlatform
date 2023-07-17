@@ -19,10 +19,48 @@ namespace MusicPlatform.API
             _dbContext = dbContext;
             _logger = logger;
         }
+        [HttpGet]
+        public IActionResult Get()
+        {
+            try
+            {
+                var songs = _dbContext.Favorites.Include(s => s.Song).ThenInclude(s => s.Artist).ToList();
+                var songsResponse = new List<FavoritesSongResponse>();
+                if (songs is null)
+                {
+                    return NotFound();
+                }
+                if (songs.Count == 0)
+                {
+                    return NotFound();
+                }
+                foreach (var s in songs)
+                {
+                    FavoritesSongResponse songResponse = new FavoritesSongResponse();
+                    songResponse.Id = s.Song.Id.ToString();
+                    songResponse.SongName = s.Song.Name;
+                    songResponse.ArtistName = s.Song.Artist.Name;
+                    songResponse.Count = s.Song.Favorites.Count;
+                    songResponse.ArtistId = s.Song.Artist.Id.ToString();
+                    songsResponse.Add(songResponse);
+                }
+
+                return Ok(songsResponse);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+
+
+        }
+
 
         // GET: api/Songs
         [HttpPost("check")]
-        public IActionResult Get(FavoritesModel model)
+        public IActionResult Chech(FavoritesModel model)
         {
 
             if (string.IsNullOrEmpty(model.Id) || string.IsNullOrEmpty(model.UserId))
@@ -60,6 +98,43 @@ namespace MusicPlatform.API
                 return NotFound();
             }
         }
+
+        [HttpPost("getfavorites")]
+        public IActionResult GetFavorites(BaseDto dto)
+        {
+            if(string.IsNullOrEmpty(dto.Id))
+            {
+                return BadRequest();
+            }
+
+            var userParsed = Guid.TryParse(dto.Id, out Guid userIdParsed);
+            if(!userParsed)
+            {
+                return BadRequest();
+            }
+
+            var user = _dbContext.Users.Include(s=> s.Favorites).ThenInclude(s=> s.Song).ThenInclude(s=> s.Artist).FirstOrDefault(u => u.Id == userIdParsed);
+            if(user is null)
+            {
+                return BadRequest();
+            }
+
+            List<UserFavoritesResponse> response = new List<UserFavoritesResponse>();
+            foreach(var favorite in user.Favorites)
+            {
+                response.Add(new UserFavoritesResponse()
+                {
+                    Artist = favorite.Song.Artist.Name,
+                    SongName = favorite.Song.Name,
+                    ArtistId = favorite.Song.Artist.Id.ToString(),
+                    SongId = favorite.Song.Id.ToString()
+                });
+            }
+
+
+            return Ok(response);
+        }
+
 
         [HttpPost]// or remove
         public IActionResult AddToFavorites(FavoritesModel model)

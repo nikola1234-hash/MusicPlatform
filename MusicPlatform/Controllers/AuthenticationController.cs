@@ -67,31 +67,28 @@ namespace MusicPlatform.Controllers
         }
 
 
-        public IActionResult Register()
-        {
-            return View();
-        }
-        public IActionResult RegisterSubmit(RegisterForm form)
+
+        public IActionResult Register(RegisterForm form)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return View("Register");
+                    return Json(new { success = false, message = "Invalid data" });
                 }
                 var usernameExists = auth.UsernameExist(form.Username);
 
                 if (usernameExists)
                 {
                     ModelState.AddModelError("UsernameExists", "Username already exists");
-                    return View("Register");
+                    return Json(new { success = false, message = "Username exists" });
                 }
 
                 var emailExists = auth.EmailExist(form.Email);
                 if (emailExists)
                 {
                     ModelState.AddModelError("EmailExists", "Email already exists");
-                    return View("Register");
+                    return Json(new { success = false, message = "Email exists" });
                 }
 
 
@@ -101,10 +98,10 @@ namespace MusicPlatform.Controllers
             {
 
                 _logger.LogError(ex.Message);
-                return View("Error");
+                return Json(new { success = false, message = "Error" });
             }
 
-            return RedirectToAction("Index", "Home");
+            return Ok(new { success = true, message = "User registered" });
         }
 
         public IActionResult Logout()

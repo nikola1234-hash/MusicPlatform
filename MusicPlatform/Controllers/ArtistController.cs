@@ -23,7 +23,6 @@ namespace MusicPlatform.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
         public IActionResult Index(string id)
         {
             try
@@ -62,5 +61,16 @@ namespace MusicPlatform.Controllers
         
         }
        
+        public IActionResult Artists()
+        {
+            AllArtistsViewModel allArtistsViewModel = new AllArtistsViewModel();
+            var artists = _dbContext.Artists.Include(s=> s.Images).Include(s=> s.Songs).ToList();
+            var artistsModel = _mapper.Map<List<ArtistModel>>(artists);
+            allArtistsViewModel.Artists = artistsModel;
+            ViewBag.Title = "Showing All artists";
+            ViewBag.Count = artists.Count;
+
+            return View(allArtistsViewModel);
+        }
     }
 }

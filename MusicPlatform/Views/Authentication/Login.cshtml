@@ -12,9 +12,102 @@
             <input type="password" name="@nameof(Model.Password)" class="form-control" id="exampleInputPassword1">
         </div>
         <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModalLong"> Register </a>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Register</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="register-form" asp-action="Register" asp-controller="Authentication">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Username</label>
+                        <input type="text" class="form-control" name="@nameof(Model.Username)" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email </label>
+                        <input type="text" class="form-control" name="Email" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <input type="password" name="Password" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Repeat Password</label>
+                        <input type="password" name="RepeatPassword" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <div class="mb-3 form-check" id="error-container" hidden>
+                        <p class="error-message"></p>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get form and error container elements
+        const form = document.getElementById('register-form');
+        const errorContainer = document.getElementById('error-container');
+        const errorMessage = errorContainer.querySelector('.error-message');
+
+        // Add form submit event listener
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Clear previous error message
+            errorMessage.textContent = '';
+            errorContainer.hidden = true;
+
+            // Collect form data
+            const formData = new FormData(form);
+
+            // Make the form submission using fetch API
+            fetch(form.action, {
+                method: form.method,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams(formData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        form.hidden = true;
+                        var body = document.querySelector('.modal-body');
+                        body.innerHTML = '<p>Registration successful!</p>';
+                    } else {
+                        // Form submission failed
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    // Display error message if provided by the server
+                    if (data && data.message) {
+                        errorMessage.textContent = data.message;
+                        errorContainer.hidden = false;
+                    }
+                })
+                .catch(error => {
+                    // Error occurred during form submission
+                    console.error('An error occurred during form submission:', error);
+                });
+        });
+    });
+</script>

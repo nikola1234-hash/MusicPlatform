@@ -1,0 +1,33 @@
+﻿@model MusicPlatform.Models.ArtistModels.AllArtistsViewModel;
+<div id="content">
+    <div class="text-center">
+        <h3 class="display-3">@ViewBag.Title</h3>
+        <p class="text-center">Total Artists: @ViewBag.Count</p>
+    </div>
+    @{
+        int artistsPerRow = 3;
+        int totalArtists = Model.Artists.Count;
+        int rowIndex = 0;
+
+    }
+
+    @for (int i = 0; i < totalArtists; i += artistsPerRow)
+    {
+        <div class="row">
+            @for (int j = i; j < i + artistsPerRow && j < totalArtists; j++)
+            {
+                var artist = Model.Artists[j];
+
+                <div class="col-4 mb-3">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="@artist.Images[0].Url" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@artist.Name</h5>
+                            <p class="card-text">Total listeners: @artist.Listeners</p>
+                            <a asp-controller="Artist" asp-action="Index" asp-route-id="@artist.Id" class="btn btn-primary">Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }

@@ -68,6 +68,137 @@ function checkFavorites(id, userId) {
         });
 }
 
+
+function getArtistFanBase() {
+    const apiUrl = '/api/artist/getfavorites';
+    const container = document.querySelector('.table-body');
+    fetch(apiUrl)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                // Request failed
+                console.error('Failed to get response');
+            }
+        }).then(data => {
+
+            container.innerHTML = '';
+            if (data.length == 0) {
+                const row = document.createElement('tr');
+                // Row inner HTML no data
+
+                row.innerHTML = `<p> No Data for this artist</p>`;
+                container.appendChild(row);
+            }
+            // Iterate over the comments and generate HTML elements
+            data.forEach(favorite => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><a href="/Artist/Index/${favorite.id}">${favorite.artistName}</a></td>
+                    <td>${favorite.count}</td>
+                    <td>${favorite.songsCount}</td>
+                `;
+
+                container.appendChild(row);
+            });
+
+        })
+        .catch(error => {
+            console.error('An error occurred while showing comments:', error);
+        });
+}
+
+function getSongsFavorites() {
+    const apiUrl = '/api/songs';
+    const container = document.querySelector('.table-body');
+    fetch(apiUrl)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                // Request failed
+                console.error('Failed to get response');
+            }
+        }).then(data => {
+
+            container.innerHTML = '';
+            if (data.length == 0) {
+                const row = document.createElement('tr');
+                // Row inner HTML no data
+
+                row.innerHTML = `<p> No Data for this song</p>`;
+                container.appendChild(row);
+            }
+            // Iterate over the comments and generate HTML elements
+            data.forEach(favorite => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><a href="/Song/Index/${favorite.id}">${favorite.songName}</a></td>
+                    <td><a href="/Artist/Index/${favorite.artistId}">${favorite.artistName}</a></td>
+                    <td>${favorite.count}</td>
+                `;
+
+                container.appendChild(row);
+            });
+
+        })
+        .catch(error => {
+            console.error('An error occurred while showing comments:', error);
+        });
+}
+
+
+function getUserFavorites(id) {
+    const container = document.querySelector('.table-body');
+    const apiUrl = '/api/songs/getfavorites';
+    const requestBody = {
+        id: id
+    };
+    // Fetch options
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    };
+
+    // Make the API request
+    fetch(apiUrl, options)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                // Request failed
+                console.error('Failed to get comments');
+            }
+        }).then(data => {
+            // Clear existing comments
+
+            container.innerHTML = '';
+            if (data.length == 0) {
+                const row = document.createElement('tr');
+                // Row inner HTML no data
+
+                row.innerHTML = `<p> No Data for this user</p>`;
+                container.appendChild(row);
+            }
+            // Iterate over the comments and generate HTML elements
+            data.forEach(favorite => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><a href="/Artist/Index/${favorite.artistId}">${favorite.artist}</a></td>
+                    <td><a href="/Song/Index/${favorite.songId}">${favorite.songName}</a></td>
+                `;
+
+                container.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('An error occurred while showing comments:', error);
+        });
+
+}
 function getComments(id) {
 
     const container = document.querySelector('.comment-section');

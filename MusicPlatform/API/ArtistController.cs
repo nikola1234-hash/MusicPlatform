@@ -31,7 +31,32 @@ namespace MusicPlatform.API
             _enrichService = enrichService;
             _hubContext = hubContext;
         }
+        [HttpGet("[action]")]
+        public IActionResult GetFavorites()
+        {
+            var fanBase = _dbContext.FanBases.Include(s=> s.Artist).ThenInclude(s=> s.Songs).ToList();
+            List<ArtistResponse> response = new List<ArtistResponse>();
+            if(fanBase is null)
+            {
+                return NotFound();
+            }
+            if(fanBase.Count == 0)
+            {
+                return NotFound();
+            }
+            foreach(var fan in fanBase)
+            {
+                var artistMap = new ArtistResponse();
+                artistMap.Id = fan.Artist.Id.ToString();
+                artistMap.ArtistName = fan.Artist.Name;
+                artistMap.Count = fanBase.Count;
+                artistMap.SongsCount = fan.Artist.Songs.Count;
+                response.Add(artistMap);
+            }
 
+            return Ok(response);
+
+        }
         // GET: api/Artist
         [HttpGet]
         public async Task<IActionResult> Get()
