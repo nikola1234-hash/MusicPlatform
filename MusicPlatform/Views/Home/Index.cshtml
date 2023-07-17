@@ -56,7 +56,7 @@
                         <div class="card-body">
                             <h5 class="card-title">@song.Name</h5>
                             <p class="card-text">Artist: @song.Artist.Name</p>
-                            <a href="@Url.Action("Index", "SongController", new { id = song.Id })" class="btn btn-primary">Details</a>
+                            <a asp-action="Index" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-primary">Details</a>
                         </div>
                     </div>
                 </div>

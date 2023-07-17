@@ -1,4 +1,4 @@
-﻿using MusicPlatform.Models.Quiz;
+﻿using MusicPlatform.Models.QuizModels;
 
 namespace MusicPlatform.Services.Quiz
 {

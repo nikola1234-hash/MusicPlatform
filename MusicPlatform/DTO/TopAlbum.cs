@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
+
 
 
 
@@ -8,40 +8,40 @@ namespace MusicPlatform.DTO
   
     public class TopAlbum
     {
-        [JsonPropertyName("artist")]
+        [JsonProperty("artist")]
         public string Artist { get; set; }
 
-        [JsonPropertyName("album")]
+        [JsonProperty("album")]
         public List<Album> Albums { get; set; }
     }
 
     public class Album
     {
-        [JsonPropertyName("rank")]
+        [JsonProperty("rank")]
         public int Rank { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("mbid")]
+        [JsonProperty("mbid")]
         public string Mbid { get; set; }
 
-        [JsonPropertyName("listeners")]
+        [JsonProperty("listeners")]
         public int Listeners { get; set; }
 
-        [JsonPropertyName("url")]
+        [JsonProperty("url")]
         public string Url { get; set; }
 
-        [JsonPropertyName("image")]
+        [JsonProperty("image")]
         public List<AlbumImage> Images { get; set; }
     }
 
     public class AlbumImage
     {
-        [JsonPropertyName("size")]
+        [JsonProperty("size")]
         public string Size { get; set; }
 
-        [JsonPropertyName("#text")]
+        [JsonProperty("#text")]
         public string Value { get; set; }
     }
 

@@ -1,47 +1,48 @@
 ﻿namespace MusicPlatform.DTO
 {
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
     public class TopTracks
     {
-        [JsonPropertyName("artist")]
+        [JsonProperty("artist")]
         public string Artist { get; set; }
 
-        [JsonPropertyName("track")]
+        [JsonProperty("track")]
         public List<Track> Tracks { get; set; }
     }
 
     public class Track
     {
-        [JsonPropertyName("rank")]
+        [JsonProperty("rank")]
         public int Rank { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("mbid")]
+        [JsonProperty("mbid")]
         public string Mbid { get; set; }
 
-        [JsonPropertyName("playcount")]
+        [JsonProperty("playcount")]
         public int Playcount { get; set; }
 
-        [JsonPropertyName("listeners")]
+        [JsonProperty("listeners")]
         public int Listeners { get; set; }
 
-        [JsonPropertyName("url")]
+        [JsonProperty("url")]
         public string Url { get; set; }
 
-        [JsonPropertyName("image")]
+        [JsonProperty("image")]
         public List<TrackImage> Images { get; set; }
     }
 
     public class TrackImage
     {
-        [JsonPropertyName("size")]
+        [JsonProperty("size")]
         public string Size { get; set; }
 
-        [JsonPropertyName("#text")]
+        [JsonProperty("#text")]
         public string Value { get; set; }
     }
 

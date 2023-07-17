@@ -32,14 +32,14 @@ namespace MusicPlatform.Services.Api
             return null;
         }
 
-        public async Task<TopAlbum> GetArtistTopAlbum(string artistName)
+        public async Task<TopAlbumResponse> GetArtistTopAlbum(string artistName)
         {
-            var url = $"{_configuration.Value.ApiBaseUrl}/2.0/?method=artist.gettopalbums&artist={artistName}r&api_key={_configuration.Value.ApiKey}&format=json";
+            var url = $"{_configuration.Value.ApiBaseUrl}/2.0/?method=artist.gettopalbums&artist={artistName}&api_key={_configuration.Value.ApiKey}&format=json";
             var response = await _httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var artist = JsonConvert.DeserializeObject<TopAlbum>(content);
+                var artist = JsonConvert.DeserializeObject<TopAlbumResponse>(content);
                 return artist;
             }
             return null;
@@ -47,14 +47,15 @@ namespace MusicPlatform.Services.Api
 
 
 
-        public async Task<TopTracks> GetTopTrack(string artistName)
+        public async Task<TopTracksResponse> GetTopTrack(string artistName)
         {
-            var url = $"{_configuration.Value.ApiBaseUrl}/2.0/?method=artist.gettoptracks&artist={artistName}r&api_key={_configuration.Value.ApiKey}&format=json";
+            var url = $"{_configuration.Value.ApiBaseUrl}/2.0/?method=artist.gettoptracks&artist={artistName}&api_key={_configuration.Value.ApiKey}&format=json";
+        
             var response = await _httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var artist = JsonConvert.DeserializeObject<TopTracks>(content);
+                var artist = JsonConvert.DeserializeObject<TopTracksResponse>(content);
                 return artist;
             }
             return null;

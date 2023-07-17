@@ -1,0 +1,95 @@
+﻿@model MusicPlatform.Models.QuizModels.QuizViewModel
+
+<div class="container mb-5 mt-5">
+    <form id="quiz-form">
+        @foreach (var question in Model.Questions)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <p class="fw-bold">@question.Question</p>
+                    <div class="container mb-5">
+                        @foreach (var answer in question.Answers)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" data-response="@question.CorrectAnswer" value="@answer" data-id="@question.Id" data-question="@question.Question" name="@question.Id" id="answer">
+                                <label class="form-check-label" for="answer">
+                                    @answer
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <span class="error-message" style="display:none;">Please select a valid answer.</span>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary score-submit">Submit</button>
+            </div>
+        </div>
+    </form>
+    <div class="row" id="score-container" hidden>
+        <div class="col">
+            <p class="text-center score"></p>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('quiz-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var selectedAnswers = Array.from(document.querySelectorAll('input[type="radio"]:checked'));
+
+        var quizModel = {
+            quizQuestions: [],
+            answers: []
+        };
+
+        selectedAnswers.forEach(function (answer) {
+            var questionId = answer.dataset.id;
+            var question = answer.dataset.question;
+            var selectedValue = answer.value;
+            var dat = answer.dataset.response;
+            // Add the question and selected answer to the quiz model
+            quizModel.quizQuestions.push({
+                question: question,
+                answers: [],
+                correctAnswer: dat,
+                id: questionId
+            });
+
+            quizModel.answers.push({
+                id: questionId,
+                answer: selectedValue
+            });
+        });
+
+        // Make a POST request to the server with the quiz model data
+        fetch('/api/quiz/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(quizModel)
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    // Failed to submit quiz
+                    console.error('Failed to submit quiz.');
+                }
+            }).then(function (data) {
+                // Display the score
+                var score = document.querySelector('.score');
+                score.innerHTML = 'Your score is ' + data;
+                var container = document.getElementById('score-container');
+                container.hidden = false;
+                setTimeout(function () { location.reload(true); }, 2000);
+            })
+            .catch(function (error) {
+                console.error('An error occurred while submitting the quiz:', error);
+            });
+    });
+</script>
+

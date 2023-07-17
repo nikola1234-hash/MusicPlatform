@@ -93,11 +93,12 @@ namespace MusicPlatform.Controllers
                 foreach(var song in result)
                 {
                     var artist = _dbContext.Artists.FirstOrDefault(a => a.Id == song.ArtistId);
+                    string artistName = artist == null ? "Unknown" : artist.Name;
                     list.Add(new SearchSongModel()
                     {
                         Id = song.Id,
                         Title = song.Name,
-                        ArtistName = artist?.Name,
+                        ArtistName = artistName,
                         ArtistId = song.ArtistId,
                         Lyrics = song.Lyrics
                         
