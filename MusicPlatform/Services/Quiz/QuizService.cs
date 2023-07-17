@@ -6,7 +6,7 @@ using MusicPlatform.Services.Api;
 
 namespace MusicPlatform.Services.Quiz
 {
-    public class QuizService
+    public class QuizService : IQuizService
     {
         private readonly AppDbContext _dbContext;
         private int maxQuestions = 3;
@@ -31,7 +31,7 @@ namespace MusicPlatform.Services.Quiz
             switch (questionType)
             {
                 case 1:
-                    return GenerateQuestionsByArtist();
+                    return await GenerateQuestionsByArtist();
                 case 2:
                     return await GenerateQuestionsAlbum();
                 case 3:
@@ -40,7 +40,7 @@ namespace MusicPlatform.Services.Quiz
                     return GenerateQuestionsBySong();
             }
 
-          
+
         }
 
         private async Task<List<QuizQuestionModel>> GenerateQuestionsAlbum()
@@ -55,7 +55,7 @@ namespace MusicPlatform.Services.Quiz
 
             List<string> answers = new List<string>();
             answers.Add(topOneAlbum.Albums.FirstOrDefault().Name.ToString());
-            for(int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var album = await apiService.GetArtistTopAlbum(artists[number + i].Name);
                 answers.Add(album.Albums.FirstOrDefault().Name.ToString());
@@ -76,7 +76,7 @@ namespace MusicPlatform.Services.Quiz
         private List<QuizQuestionModel> GenerateQuestionsBySong()
         {
             List<QuizQuestionModel> questions = new List<QuizQuestionModel>();
-            var songs = _dbContext.Songs.Include(s=> s.Artist).ToList();
+            var songs = _dbContext.Songs.Include(s => s.Artist).ToList();
 
             Random random = new Random();
             int number = random.Next(1, songs.Count);
@@ -89,20 +89,40 @@ namespace MusicPlatform.Services.Quiz
                 question.CorrectAnswer = songs[number].Artist.Name;
                 questions.Add(question);
             }
-            
+
             return questions;
 
 
         }
 
-        private List<QuizQuestionModel> GenerateQuestionsByGenre()
+        private async Task<List<QuizQuestionModel>> GenerateQuestionsByArtist()
         {
-            throw new NotImplementedException();
-        }
+            List<QuizQuestionModel> questions = new List<QuizQuestionModel>();
+            var songs = _dbContext.Songs.Include(s => s.Artist).ToList();
 
-        private List<QuizQuestionModel> GenerateQuestionsByArtist()
-        {
-            throw new NotImplementedException();
+            Random random = new Random();
+            int number = random.Next(1, songs.Count);
+
+            var topSongs = await apiService.GetTopTrack(songs[number].Artist.Name);
+
+            List<string> answers = new List<string>();
+            answers.Add(topSongs.Tracks.FirstOrDefault().Name);
+            for (int i = 0; i < 2; i++)
+            {
+                var song = await apiService.GetTopTrack(songs[number + i].Artist.Name);
+                answers.Add(song.Tracks.FirstOrDefault().Name);
+            }
+
+            for (int i = 0; i < maxQuestions; i++)
+            {
+                var question = new QuizQuestionModel();
+                question.Question = "Which song is number one of the Artist: " + songs[number].Name;
+                question.Answers = GenerateAnswers(answers);
+                question.CorrectAnswer = topSongs.Tracks.FirstOrDefault().Name;
+                questions.Add(question);
+            }
+
+            return questions;
         }
 
         private List<string> GenerateAnswers(Song song)
@@ -122,7 +142,7 @@ namespace MusicPlatform.Services.Quiz
 
         private List<string> GenerateAnswers(List<string> answer)
         {
- 
+
 
             return ShakeList(answer);
 
@@ -132,7 +152,7 @@ namespace MusicPlatform.Services.Quiz
         {
             Random random = new Random();
             int n = asnwers.Count;
-            while(n > 1)
+            while (n > 1)
             {
                 n--;
                 int k = random.Next(n + 1);

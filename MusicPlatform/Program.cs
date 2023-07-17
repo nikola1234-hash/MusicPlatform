@@ -22,6 +22,7 @@ using MusicPlatform.Services.EnrichArtist;
 using MusicPlatform.Data.Repository;
 using MusicPlatform.Data.Repository.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
+using MusicPlatform.Services.Quiz;
 
 namespace MusicPlatform
 {
@@ -60,7 +61,7 @@ namespace MusicPlatform
             builder.Services.AddSession();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<ISessionService, SessionService>();
-
+            builder.Services.AddScoped<IQuizService, QuizService>();
             var config = new MapperConfiguration(
                                             cfg =>
                                             {
