@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MusicPlatform.Data;
 using MusicPlatform.Data.Entities;
+using MusicPlatform.DTO;
 using MusicPlatform.Models.API.SongsModels;
 
 namespace MusicPlatform.API
@@ -154,6 +156,7 @@ namespace MusicPlatform.API
                 comment.SongId = song.Id;
                 comment.Text = model.Comment;
 
+                _dbContext.Comments.Add(comment);
 
                 song.Comments.Add(comment);
                 _dbContext.SaveChanges();
@@ -167,6 +170,40 @@ namespace MusicPlatform.API
             }
 
 
+        }
+
+
+        [HttpPost("getcomments")]
+        public IActionResult GetComments(BaseDto dto)
+        {
+            var id = dto.Id;
+            if(string.IsNullOrEmpty(id))
+            {
+                return BadRequest();
+            }
+            var songParsed = Guid.TryParse(id, out Guid songIdParsed);
+            if (!songParsed)
+            {
+                return BadRequest();
+            }
+            var song = _dbContext.Songs.Include(s=> s.Comments).ThenInclude(s=> s.User).FirstOrDefault(s => s.Id == songIdParsed);
+            if(song is null)
+            {
+                return BadRequest();
+            }
+
+            var comments = song.Comments.Select(c => new CommentDto
+            {
+                Text = c.Text,
+                Username = c.User.Username
+            }).ToList();
+
+            if(comments.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(comments);
         }
 
 

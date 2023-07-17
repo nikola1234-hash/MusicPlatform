@@ -67,6 +67,60 @@ function checkFavorites(id, userId) {
             console.error('An error occurred while adding song to favorites:', error);
         });
 }
+
+function getComments(id) {
+
+    const container = document.querySelector('.comment-section');
+    const apiUrl = '/api/songs/getcomments';
+    // Request body
+    const requestBody = {
+        id: id
+    };
+
+    // Fetch options
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    };
+
+    // Make the API request
+    fetch(apiUrl, options)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                // Request failed
+                console.error('Failed to get comments');
+            }
+        }).then(data => {
+            // Clear existing comments
+
+            container.innerHTML = '';
+            // Iterate over the comments and generate HTML elements
+            data.forEach(comment => {
+                const pUser = document.createElement('p');
+                pUser.textContent = 'User: ' + comment.username;
+
+                const textarea = document.createElement('textarea');
+                textarea.classList.add('form-control');
+                textarea.rows = 3;
+                textarea.readOnly = true;
+                textarea.textContent = comment.text;
+                const hr = document.createElement('hr');
+                container.appendChild(pUser);
+                container.appendChild(textarea);
+                container.appendChild(hr);
+            });
+        })
+        .catch(error => {
+            console.error('An error occurred while showing comments:', error);
+        });
+
+}
+
 function addComment(userId, songId) {
     // API endpoint URL
     const apiUrl = '/api/songs/comment';

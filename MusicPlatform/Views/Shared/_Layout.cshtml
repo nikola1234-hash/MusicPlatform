@@ -18,7 +18,7 @@
             <div class="container-fluid">
                 @if (Html.IsAuthenticated() && Html.IsAdmin())
                 {
-                    <a class="navbar-brand" asp-action="Index" asp-area="Admin" asp-controller="Admin">Admin Panel</a>
+                    <a class="navbar-brand" href="#">Admin Panel</a>
                 }
                 else
                 {
@@ -34,20 +34,21 @@
                             <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Search song by lyrics</a>
+                            <a class="nav-link" href="#">Lyrics search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Quiz</a>
                         </li>
                         @if (Html.IsAdmin())
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Dropdown
+                                    Admin Options
                                 </a>
-
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    <li><a class="dropdown-item" href="#">User Details</a></li>
+                                    <li><a class="dropdown-item" href="#">Song Details</a></li>
+                                    <li><a class="dropdown-item" href="#">Artist Details</a></li>
                                 </ul>
                             </li>
                         }

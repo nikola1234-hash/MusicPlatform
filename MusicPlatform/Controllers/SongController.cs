@@ -47,7 +47,6 @@ namespace MusicPlatform.Controllers
             foreach (var comment in comments)
             {
                 var user = _dbContext.Users.FirstOrDefault(u => u.Id == comment.UserId);
-
                 CommentModel commentModel = new CommentModel()
                 {
 

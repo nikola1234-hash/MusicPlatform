@@ -42,38 +42,32 @@
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Comment:</label>
                             <textarea class="form-control" id="commentText" rows="3"></textarea>
-                            <button onclick="addComment('@Html.GetUserId()', '@Model.Song.Id')" class="btn mt-2 btn-success">Submit</button>
+                            <button onclick="addComment('@Html.GetUserId()', '@Model.Song.Id')" type="button" class="btn mt-2 btn-success">Submit</button>
                         </div>
                     </form>
-                }
-                
-
-            </div><!-- / project-info-box -->
-        </div><!-- / column -->
-        @if(Model.Comments.Count > 0)
-        {
-            <div class="col-md-7">
-
-                <div class="project-info-box">
-                    <p>Comments:</p>
-                    @foreach (var comment in Model.Comments)
+                    <br />
+                    <hr />
+                    @if (Model.Comments.Count > 0)
                     {
-                        <p>User: @comment.User</p>
-                        <textarea class="form-control" rows="3" readonly>@comment.Comment</textarea>
 
+                        <p>Comments:</p>
+                        <div class="comment-section">
+
+                         </div>
                     }
+                }
 
 
-                </div><!-- / project-info-box -->
             </div>
-
-            <!-- / column -->
-        }
+        </div>
+       
+ 
     
     </div>
 </div>
 <script>
     window.addEventListener('load', function(){
         checkFavorites('@Model.Song.Id', '@Html.GetUserId()');
+        getComments('@Model.Song.Id');
     });
 </script>
